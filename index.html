@@ -174,43 +174,49 @@
                 </a>
 
                 <!-- DESKTOP MENU -->
-                <nav class="hidden md:flex items-center space-x-8 text-[11px] tracking-[0.2em] uppercase font-medium text-charcoal-800">
+                <nav class="hidden lg:flex items-center space-x-7 text-[11px] tracking-[0.2em] uppercase font-medium text-charcoal-800">
                     <a href="#home" class="hover:text-gold-600 transition-colors">Home</a>
                     <a href="#about" class="hover:text-gold-600 transition-colors">About</a>
-                    <a href="#services" class="hover:text-gold-600 transition-colors">Services</a>
-                    <a href="#projects" class="hover:text-gold-600 transition-colors">Projects</a>
                     <a href="#gallery" class="hover:text-gold-600 transition-colors">Gallery</a>
+                    <a href="#portfolio" class="hover:text-gold-600 transition-colors">Portfolio</a>
+                    <a href="#services" class="hover:text-gold-600 transition-colors">Services</a>
                     <a href="#contact" class="hover:text-gold-600 transition-colors">Contact</a>
                 </nav>
 
                 <!-- HEADER ACTION BUTTONS -->
-                <div class="hidden lg:flex items-center space-x-4">
-                    <a href="tel:+18005550199" class="text-xs uppercase tracking-wider font-semibold text-charcoal-900 hover:text-gold-600 transition-colors flex items-center gap-2">
+                <div class="hidden md:flex items-center space-x-3">
+                    <button onclick="openOwnerDashboard()" class="px-3.5 py-1.5 bg-taupe-300/80 text-charcoal-900 rounded-full text-[10px] uppercase tracking-wider font-semibold hover:bg-gold-500 hover:text-white transition-all flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-chart-line text-xs"></i> Owner Dashboard
+                    </button>
+                    <a href="tel:+18005550199" class="text-xs uppercase tracking-wider font-semibold text-charcoal-900 hover:text-gold-600 transition-colors hidden xl:flex items-center gap-1.5">
                         <i class="fa-solid fa-phone text-xs text-gold-500"></i> Call
                     </a>
-                    <a href="https://wa.me/18005550199" target="_blank" rel="noopener" class="text-xs uppercase tracking-wider font-semibold text-green-700 hover:text-green-800 transition-colors flex items-center gap-1.5">
+                    <a href="https://wa.me/18005550199" target="_blank" rel="noopener" class="text-xs uppercase tracking-wider font-semibold text-green-700 hover:text-green-800 transition-colors hidden xl:flex items-center gap-1">
                         <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
                     </a>
-                    <a href="#contact" class="px-5 py-2 border border-charcoal-900 rounded-full text-xs tracking-widest uppercase hover:bg-charcoal-900 hover:text-white transition-all">
+                    <a href="#contact" class="px-4 py-2 border border-charcoal-900 rounded-full text-[11px] tracking-widest uppercase hover:bg-charcoal-900 hover:text-white transition-all">
                         Consultation
                     </a>
                 </div>
 
                 <!-- MOBILE BURGER BUTTON -->
-                <button id="mobile-menu-btn" class="md:hidden text-charcoal-900 p-2 focus:outline-none" aria-label="Toggle Mobile Menu">
+                <button id="mobile-menu-btn" class="lg:hidden text-charcoal-900 p-2 focus:outline-none" aria-label="Toggle Mobile Menu">
                     <i class="fa-solid fa-bars-staggered text-xl"></i>
                 </button>
             </div>
         </div>
 
         <!-- MOBILE MENU OVERLAY -->
-        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-taupe-200 px-8 pt-4 pb-8 space-y-4 shadow-xl">
+        <div id="mobile-menu" class="hidden lg:hidden glass-panel border-b border-taupe-200 px-8 pt-4 pb-8 space-y-4 shadow-xl">
             <a href="#home" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">Home</a>
             <a href="#about" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">About Us</a>
-            <a href="#services" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">Services</a>
-            <a href="#projects" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">Projects</a>
             <a href="#gallery" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">Gallery</a>
+            <a href="#portfolio" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">Portfolio</a>
+            <a href="#services" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-charcoal-900">Services</a>
             <a href="#contact" class="mobile-link block py-2 text-xs uppercase tracking-[0.2em] font-semibold text-gold-600">Contact Us</a>
+            <button onclick="openOwnerDashboard(); mobileMenu.classList.add('hidden');" class="w-full text-left py-2 text-xs uppercase tracking-[0.2em] font-bold text-taupe-700 flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-gold-600"></i> Owner Web Analytics
+            </button>
             <div class="pt-4 border-t border-taupe-300 flex items-center justify-between">
                 <a href="tel:+18005550199" class="text-xs uppercase tracking-widest font-semibold text-charcoal-900 flex items-center gap-2">
                     <i class="fa-solid fa-phone text-gold-500"></i> Call Us
@@ -247,7 +253,7 @@
                         <a href="#contact" class="px-6 py-3.5 bg-charcoal-900 text-white rounded-full text-xs tracking-widest uppercase font-medium hover:bg-gold-500 transition-all duration-300 shadow-md">
                             Get Free Consultation
                         </a>
-                        <a href="#projects" class="px-6 py-3.5 border border-charcoal-900 text-charcoal-900 rounded-full text-xs tracking-widest uppercase font-medium hover:bg-charcoal-900 hover:text-white transition-all duration-300">
+                        <a href="#portfolio" class="px-6 py-3.5 border border-charcoal-900 text-charcoal-900 rounded-full text-xs tracking-widest uppercase font-medium hover:bg-charcoal-900 hover:text-white transition-all duration-300">
                             View Projects
                         </a>
                         <a href="tel:+18005550199" class="px-4 py-3.5 border border-charcoal-800/40 text-charcoal-900 rounded-full text-xs tracking-widest uppercase hover:border-charcoal-900 transition-all" title="Call Now">
@@ -345,7 +351,7 @@
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
                 <div class="reveal-on-scroll">
                     <h2 class="font-serif text-3xl sm:text-4xl text-charcoal-900 font-normal">Gallery</h2>
-                    <p class="text-xs text-charcoal-800 mt-1 font-light">Explore selected snapshots from our Instagram project archive.</p>
+                    <p class="text-xs text-charcoal-800 mt-1 font-light">Explore selected snapshots from our project archive.</p>
                 </div>
 
                 <!-- CATEGORY SEARCH & FILTER -->
@@ -407,8 +413,8 @@
         </div>
     </section>
 
-    <!-- FEATURED PROJECTS CASE STUDIES (MATCHES EXACT LAYOUT FROM TEMPLATE: URBAN RETREAT, MODERN LIVING, ELEGANT LIVING SPACE) -->
-    <section id="projects" class="py-20 px-4 sm:px-6 lg:px-12">
+    <!-- CASE STUDIES SECTION (URBAN RETREAT, MODERN LIVING, ELEGANT LIVING SPACE) -->
+    <section class="py-20 px-4 sm:px-6 lg:px-12">
         <div class="max-w-7xl mx-auto space-y-24">
             
             <!-- CASE STUDY 1: URBAN RETREAT -->
@@ -416,13 +422,11 @@
                 <div class="flex justify-between items-center">
                     <h2 class="font-serif text-3xl sm:text-4xl text-charcoal-900 font-normal">Urban Retreat</h2>
                     <button onclick="openProjectModal('Urban Retreat', 'Luxury Penthouse', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80', 'A 5,200 sq.ft minimal penthouse designed with floor-to-ceiling double glazing, acoustic warm wood cladding, and bespoke Italian low-profile furniture.')" class="px-5 py-2 border border-charcoal-900 rounded-full text-xs uppercase tracking-widest hover:bg-charcoal-900 hover:text-white transition-all">
-                        View Project
+                        View Details
                     </button>
                 </div>
 
-                <!-- 2-COLUMN CASE STUDY BLOCK MATCHING TEMPLATE -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                    <!-- BACKGROUND / SOLUTION CARD -->
                     <div class="lg:col-span-5 bg-taupe-400 text-white rounded-3xl p-8 sm:p-10 flex flex-col justify-center space-y-6 shadow-sm">
                         <div>
                             <h3 class="font-serif text-xl font-medium border-b border-white/20 pb-2 mb-3">Background</h3>
@@ -433,18 +437,16 @@
                         <div>
                             <h3 class="font-serif text-xl font-medium border-b border-white/20 pb-2 mb-3">Solution</h3>
                             <p class="text-xs text-cream-100 leading-relaxed font-light">
-                                We designed integrated cove atmospheric lighting, micro-cement neutral walls, and handcrafted walnut joinery to evoke an serene, organic retreat.
+                                We designed integrated cove atmospheric lighting, micro-cement neutral walls, and handcrafted walnut joinery to evoke a serene, organic retreat.
                             </p>
                         </div>
                     </div>
 
-                    <!-- RIGHT IMAGE CARD -->
                     <div class="lg:col-span-7 rounded-3xl overflow-hidden shadow-sm border border-taupe-300">
                         <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80" alt="Urban Retreat Detail" class="w-full h-80 sm:h-96 object-cover hover:scale-105 transition-transform duration-700">
                     </div>
                 </div>
 
-                <!-- FULL WIDTH FEATURE IMAGE MATCHING TEMPLATE -->
                 <div class="rounded-3xl overflow-hidden shadow-md border border-taupe-300 mt-6">
                     <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=80" alt="Urban Retreat Living Room Showcase" class="w-full h-80 sm:h-[480px] object-cover hover:scale-105 transition-transform duration-700">
                 </div>
@@ -455,13 +457,11 @@
                 <div class="flex justify-between items-center">
                     <h2 class="font-serif text-3xl sm:text-4xl text-charcoal-900 font-normal">Modern Living</h2>
                     <button onclick="openProjectModal('Modern Living', 'Turnkey Villa Construction', 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1200&q=80', 'Ground-up architectural construction of a double-height suburban villa featuring custom brass accent fixtures and integrated smart home systems.')" class="px-5 py-2 border border-charcoal-900 rounded-full text-xs uppercase tracking-widest hover:bg-charcoal-900 hover:text-white transition-all">
-                        View Project
+                        View Details
                     </button>
                 </div>
 
-                <!-- 2-COLUMN CASE STUDY BLOCK -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                    <!-- BACKGROUND / SOLUTION CARD -->
                     <div class="lg:col-span-5 bg-taupe-400 text-white rounded-3xl p-8 sm:p-10 flex flex-col justify-center space-y-6 shadow-sm">
                         <div>
                             <h3 class="font-serif text-xl font-medium border-b border-white/20 pb-2 mb-3">Background</h3>
@@ -477,13 +477,11 @@
                         </div>
                     </div>
 
-                    <!-- RIGHT IMAGE CARD -->
                     <div class="lg:col-span-7 rounded-3xl overflow-hidden shadow-sm border border-taupe-300">
                         <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1000&q=80" alt="Modern Living Interior" class="w-full h-80 sm:h-96 object-cover hover:scale-105 transition-transform duration-700">
                     </div>
                 </div>
 
-                <!-- 2-COLUMN GRID IMAGES MATCHING TEMPLATE SECONDARY SHOWCASE -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
                     <div class="rounded-3xl overflow-hidden shadow-sm border border-taupe-300">
                         <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80" alt="Modern Living Angle 1" class="w-full h-80 object-cover hover:scale-105 transition-transform duration-700">
@@ -494,18 +492,17 @@
                 </div>
             </div>
 
-            <!-- CASE STUDY 3: ELEGANT LIVING SPACE -->
+            <!-- CASE STUDY 3: ELEGANT LIVING SPACE (REFINED WITHOUT BOTTOM IMAGE) -->
             <div class="space-y-6 reveal-on-scroll">
                 <div class="flex justify-between items-center">
                     <h2 class="font-serif text-3xl sm:text-4xl text-charcoal-900 font-normal">Elegant Living Space</h2>
                     <button onclick="openProjectModal('Elegant Living Space', 'Bespoke Interior Styling', 'https://images.unsplash.com/photo-1600573472591-ee6c563aaec9?auto=format&fit=crop&w=1200&q=80', 'Comprehensive interior styling incorporating natural stone textures, custom ceramic artifacts, and warm atmospheric lighting schemes.')" class="px-5 py-2 border border-charcoal-900 rounded-full text-xs uppercase tracking-widest hover:bg-charcoal-900 hover:text-white transition-all">
-                        View Project
+                        View Details
                     </button>
                 </div>
 
-                <!-- 2-COLUMN CASE STUDY BLOCK -->
+                <!-- 2-COLUMN BALANCED CASE STUDY CARD -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                    <!-- BACKGROUND / SOLUTION CARD -->
                     <div class="lg:col-span-5 bg-taupe-400 text-white rounded-3xl p-8 sm:p-10 flex flex-col justify-center space-y-6 shadow-sm">
                         <div>
                             <h3 class="font-serif text-xl font-medium border-b border-white/20 pb-2 mb-3">Background</h3>
@@ -521,23 +518,95 @@
                         </div>
                     </div>
 
-                    <!-- RIGHT IMAGE CARD -->
                     <div class="lg:col-span-7 rounded-3xl overflow-hidden shadow-sm border border-taupe-300">
                         <img src="https://images.unsplash.com/photo-1600573472591-ee6c563aaec9?auto=format&fit=crop&w=1000&q=80" alt="Elegant Living Space Detail" class="w-full h-80 sm:h-96 object-cover hover:scale-105 transition-transform duration-700">
                     </div>
-                </div>
-
-                <!-- MOODBOARD FLAT-LAY SHOWCASE MATCHING TEMPLATE BOTTOM -->
-                <div class="rounded-3xl overflow-hidden shadow-md border border-taupe-300 mt-6">
-                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1600&q=80" alt="Material Swatches & Texture Board" class="w-full h-80 sm:h-[400px] object-cover hover:scale-105 transition-transform duration-700">
                 </div>
             </div>
 
         </div>
     </section>
 
-    <!-- SERVICES SECTION ("TRANSFORM YOUR SPACE WITH OUR EXPERTISE" MATCHING TEMPLATE BOTTOM SECTION) -->
-    <section id="services" class="py-20 px-4 sm:px-6 lg:px-12 bg-cream-50">
+    <!-- NEW COMPANY PORTFOLIO SECTION (PLACED DIRECTLY ABOVE "TRANSFORM YOUR SPACE WITH OUR EXPERTISE") -->
+    <section id="portfolio" class="py-20 px-4 sm:px-6 lg:px-12 bg-cream-50 border-t border-taupe-300/40">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- SECTION HEADER -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 reveal-on-scroll">
+                <div>
+                    <span class="text-[11px] font-semibold tracking-[0.25em] text-gold-600 uppercase">Masterwork Archive</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl text-charcoal-900 mt-1 font-normal">Company Portfolio</h2>
+                </div>
+                
+                <!-- PORTFOLIO FILTER TABS -->
+                <div class="flex flex-wrap items-center gap-2 mt-6 md:mt-0" id="portfolio-tabs">
+                    <button class="portfolio-tab active px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded-full border border-charcoal-900 bg-charcoal-900 text-white" data-pfilter="all">All Projects</button>
+                    <button class="portfolio-tab px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded-full border border-taupe-300 text-charcoal-800 hover:border-charcoal-900" data-pfilter="residential">Residential</button>
+                    <button class="portfolio-tab px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded-full border border-taupe-300 text-charcoal-800 hover:border-charcoal-900" data-pfilter="villas">Turnkey Villas</button>
+                    <button class="portfolio-tab px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded-full border border-taupe-300 text-charcoal-800 hover:border-charcoal-900" data-pfilter="commercial">Commercial</button>
+                </div>
+            </div>
+
+            <!-- PORTFOLIO CARDS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
+                
+                <!-- Portfolio Card 1 -->
+                <div class="portfolio-card group bg-white rounded-3xl overflow-hidden border border-taupe-300/60 shadow-sm hover:shadow-xl transition-all duration-500 reveal-on-scroll" data-pcat="villas">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" alt="Elysian Horizon Villa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <span class="absolute top-4 left-4 bg-charcoal-900/80 backdrop-blur-md text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full font-medium">Turnkey Villa</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-serif text-xl text-charcoal-900 font-medium">Elysian Horizon Villa</h3>
+                        <p class="text-xs text-charcoal-800 font-light leading-relaxed">6,800 sq.ft coastal estate with infinity pool integration, cantilever decks, and custom glass elevation.</p>
+                        <div class="pt-3 border-t border-cream-200 flex items-center justify-between text-[11px] text-taupe-700 font-medium">
+                            <span><i class="fa-solid fa-ruler-combined text-gold-600 mr-1"></i> 6,800 Sq.Ft</span>
+                            <span><i class="fa-solid fa-calendar text-gold-600 mr-1"></i> 2024</span>
+                            <button onclick="openProjectModal('Elysian Horizon Villa', 'Turnkey Villa', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', 'Complete architectural construction from raw plot to key handover. Custom Italian marble floors and double-glazed solar panel facade.')" class="text-gold-600 hover:text-charcoal-900 font-bold uppercase tracking-wider text-[10px]">Specs &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Card 2 -->
+                <div class="portfolio-card group bg-white rounded-3xl overflow-hidden border border-taupe-300/60 shadow-sm hover:shadow-xl transition-all duration-500 reveal-on-scroll" data-pcat="residential">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="The Sanctuary Apartment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <span class="absolute top-4 left-4 bg-charcoal-900/80 backdrop-blur-md text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full font-medium">Residential</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-serif text-xl text-charcoal-900 font-medium">The Sanctuary Duplex</h3>
+                        <p class="text-xs text-charcoal-800 font-light leading-relaxed">Modern duplex living space with concealed acoustic wall paneling and custom warm-toned modular furniture.</p>
+                        <div class="pt-3 border-t border-cream-200 flex items-center justify-between text-[11px] text-taupe-700 font-medium">
+                            <span><i class="fa-solid fa-ruler-combined text-gold-600 mr-1"></i> 3,400 Sq.Ft</span>
+                            <span><i class="fa-solid fa-calendar text-gold-600 mr-1"></i> 2024</span>
+                            <button onclick="openProjectModal('The Sanctuary Duplex', 'Residential', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80', 'Bespoke residential transformation featuring walnut millwork, hidden storage systems, and atmospheric smart lighting controls.')" class="text-gold-600 hover:text-charcoal-900 font-bold uppercase tracking-wider text-[10px]">Specs &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Card 3 -->
+                <div class="portfolio-card group bg-white rounded-3xl overflow-hidden border border-taupe-300/60 shadow-sm hover:shadow-xl transition-all duration-500 reveal-on-scroll" data-pcat="commercial">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Vance Corporate Suite" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <span class="absolute top-4 left-4 bg-charcoal-900/80 backdrop-blur-md text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full font-medium">Commercial</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-serif text-xl text-charcoal-900 font-medium">Vance Corporate Headquarters</h3>
+                        <p class="text-xs text-charcoal-800 font-light leading-relaxed">High-end executive corporate floor featuring acoustic ceiling baffles and open-plan executive glass suites.</p>
+                        <div class="pt-3 border-t border-cream-200 flex items-center justify-between text-[11px] text-taupe-700 font-medium">
+                            <span><i class="fa-solid fa-ruler-combined text-gold-600 mr-1"></i> 12,000 Sq.Ft</span>
+                            <span><i class="fa-solid fa-calendar text-gold-600 mr-1"></i> 2023</span>
+                            <button onclick="openProjectModal('Vance Corporate Headquarters', 'Commercial Space', 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80', 'Corporate interior execution engineered for maximum acoustic privacy, ergonomics, and international executive presentation.')" class="text-gold-600 hover:text-charcoal-900 font-bold uppercase tracking-wider text-[10px]">Specs &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION ("TRANSFORM YOUR SPACE WITH OUR EXPERTISE") -->
+    <section id="services" class="py-20 px-4 sm:px-6 lg:px-12 bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
@@ -547,9 +616,8 @@
                         Transform Your Space<br>with Our Expertise
                     </h2>
 
-                    <!-- COMPREHENSIVE SERVICE LIST INCLUDING USER REQUIREMENTS -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-couch text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Interior Design</h3>
@@ -557,7 +625,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Custom furniture layout, color palettes, and residential styling.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-helmet-safety text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Turnkey Construction</h3>
@@ -565,7 +633,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Ground-up civil work, structural engineering, and site management.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-wand-magic-sparkles text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Luxury Renovation</h3>
@@ -573,7 +641,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Complete spatial overhaul and modern aesthetic upgrades.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-cubes text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">3D Design & Renders</h3>
@@ -581,7 +649,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Photorealistic 3D spatial visualizations before build execution.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-compass-drafting text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Floor Plans</h3>
@@ -589,7 +657,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Optimized 2D architectural layouts and MEP planning.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-kitchen-set text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Kitchen Design</h3>
@@ -597,7 +665,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Modular German/Italian engineered kitchen layouts.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-bed text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Bedroom & Wardrobes</h3>
@@ -605,7 +673,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Master bedroom suites & walk-in modular wardrobes.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-bath text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Bathroom Design</h3>
@@ -613,7 +681,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Spa-inspired bathrooms with marble & concealed hardware.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-building text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Commercial Design</h3>
@@ -621,7 +689,7 @@
                             <p class="text-[11px] text-charcoal-800 mt-1 font-light">Executive suites, retail stores, and boutique hotels.</p>
                         </div>
 
-                        <div class="p-4 bg-white rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
+                        <div class="p-4 bg-cream-50 rounded-2xl border border-taupe-200 hover:border-taupe-400 transition-all shadow-sm">
                             <div class="flex items-center gap-3">
                                 <i class="fa-solid fa-compass text-gold-600 text-base"></i>
                                 <h3 class="font-serif font-semibold text-charcoal-900 text-sm">Vastu Consultancy</h3>
@@ -631,7 +699,7 @@
                     </div>
                 </div>
 
-                <!-- SERVICES RIGHT IMAGE MATCHING BLUEPRINT IMAGE IN TEMPLATE -->
+                <!-- SERVICES RIGHT IMAGE MATCHING TEMPLATE -->
                 <div class="lg:col-span-5 reveal-on-scroll">
                     <div class="rounded-3xl overflow-hidden shadow-lg border border-taupe-300">
                         <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80" alt="Architectural Planning & Blueprints" class="w-full h-[520px] object-cover hover:scale-105 transition-transform duration-700">
@@ -643,16 +711,13 @@
     </section>
 
     <!-- TESTIMONIALS SECTION (GOOGLE REVIEW SLIDER STYLE) -->
-    <section class="py-20 px-4 sm:px-6 lg:px-12 bg-white">
+    <section class="py-20 px-4 sm:px-6 lg:px-12 bg-cream-50 border-t border-taupe-300/40">
         <div class="max-w-4xl mx-auto text-center reveal-on-scroll">
             <span class="text-[11px] font-semibold tracking-[0.25em] text-gold-600 uppercase">Verified Feedback</span>
             <h2 class="font-serif text-3xl sm:text-4xl text-charcoal-900 mt-2 font-normal">What Our Clients Say</h2>
             <div class="w-12 h-0.5 bg-taupe-400 mx-auto mt-4 mb-12"></div>
 
-            <!-- SLIDER CONTAINER -->
             <div class="relative min-h-[220px] flex items-center justify-center">
-                
-                <!-- Review 1 -->
                 <div class="testimonial-slide opacity-100 transition-opacity duration-500 absolute inset-0 flex flex-col justify-center items-center">
                     <div class="flex text-amber-500 gap-1 mb-4">
                         <i class="fa-solid fa-star text-sm"></i>
@@ -670,7 +735,6 @@
                     </div>
                 </div>
 
-                <!-- Review 2 -->
                 <div class="testimonial-slide opacity-0 transition-opacity duration-500 absolute inset-0 flex flex-col justify-center items-center">
                     <div class="flex text-amber-500 gap-1 mb-4">
                         <i class="fa-solid fa-star text-sm"></i>
@@ -687,10 +751,8 @@
                         <p class="text-[11px] text-taupe-600">Google Verified Review • ★ 5.0</p>
                     </div>
                 </div>
-
             </div>
 
-            <!-- CONTROLS -->
             <div class="flex justify-center items-center gap-4 mt-8">
                 <button id="prev-test" class="w-9 h-9 border border-taupe-300 rounded-full flex items-center justify-center text-charcoal-800 hover:bg-charcoal-900 hover:text-white transition-all">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -703,7 +765,7 @@
     </section>
 
     <!-- CONTACT SECTION WITH WORKING FORM & GOOGLE MAPS -->
-    <section id="contact" class="py-20 px-4 sm:px-6 lg:px-12 bg-cream-50">
+    <section id="contact" class="py-20 px-4 sm:px-6 lg:px-12 bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 
@@ -762,27 +824,27 @@
                 </div>
 
                 <!-- CONTACT FORM -->
-                <div class="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-taupe-300 shadow-sm reveal-on-scroll">
+                <div class="lg:col-span-7 bg-cream-50 p-8 sm:p-10 rounded-3xl border border-taupe-300 shadow-sm reveal-on-scroll">
                     <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-[10px] uppercase font-bold text-charcoal-900 mb-1" for="name">Your Name *</label>
-                                <input type="text" id="name" required class="w-full px-4 py-3 bg-cream-50 border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="e.g. Alex Vance">
+                                <input type="text" id="name" required class="w-full px-4 py-3 bg-white border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="e.g. Alex Vance">
                             </div>
                             <div>
                                 <label class="block text-[10px] uppercase font-bold text-charcoal-900 mb-1" for="phone">Phone Number *</label>
-                                <input type="tel" id="phone" required class="w-full px-4 py-3 bg-cream-50 border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="+1 (555) 000-0000">
+                                <input type="tel" id="phone" required class="w-full px-4 py-3 bg-white border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="+1 (555) 000-0000">
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-[10px] uppercase font-bold text-charcoal-900 mb-1" for="email">Email Address *</label>
-                            <input type="email" id="email" required class="w-full px-4 py-3 bg-cream-50 border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="alex@domain.com">
+                            <input type="email" id="email" required class="w-full px-4 py-3 bg-white border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="alex@domain.com">
                         </div>
 
                         <div>
                             <label class="block text-[10px] uppercase font-bold text-charcoal-900 mb-1" for="message">Project Requirements *</label>
-                            <textarea id="message" rows="4" required class="w-full px-4 py-3 bg-cream-50 border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="Describe your property scope, location, timeline, or preferred services..."></textarea>
+                            <textarea id="message" rows="4" required class="w-full px-4 py-3 bg-white border border-taupe-300 rounded-xl text-xs focus:outline-none focus:border-charcoal-900 transition-colors" placeholder="Describe your property scope, location, timeline, or preferred services..."></textarea>
                         </div>
 
                         <button type="submit" class="w-full py-4 bg-charcoal-900 text-white rounded-xl text-xs uppercase tracking-widest font-semibold hover:bg-gold-500 transition-colors shadow-sm">
@@ -821,8 +883,8 @@
                     <ul class="space-y-2 text-xs text-taupe-200 font-light">
                         <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
                         <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#portfolio" class="hover:text-white transition-colors">Portfolio</a></li>
                         <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
-                        <li><a href="#projects" class="hover:text-white transition-colors">Projects</a></li>
                         <li><a href="#gallery" class="hover:text-white transition-colors">Gallery</a></li>
                     </ul>
                 </div>
@@ -839,12 +901,13 @@
                     </ul>
                 </div>
 
-                <!-- LEGAL -->
+                <!-- LEGAL & OWNER ADMIN -->
                 <div>
-                    <h4 class="font-serif text-sm tracking-widest uppercase text-gold-500 mb-4">Legal & System</h4>
+                    <h4 class="font-serif text-sm tracking-widest uppercase text-gold-500 mb-4">Legal & Admin</h4>
                     <ul class="space-y-2 text-xs text-taupe-200 font-light">
                         <li><button onclick="openModal('privacy-modal')" class="hover:text-white transition-colors text-left">Privacy Policy</button></li>
                         <li><button onclick="openModal('terms-modal')" class="hover:text-white transition-colors text-left">Terms & Conditions</button></li>
+                        <li><button onclick="openOwnerDashboard()" class="hover:text-gold-500 transition-colors text-left font-semibold text-gold-500"><i class="fa-solid fa-chart-pie mr-1"></i> Owner Analytics Dashboard</button></li>
                         <li><button onclick="openModal('404-modal')" class="hover:text-white transition-colors text-left">System Status (404 Test)</button></li>
                     </ul>
                 </div>
@@ -857,6 +920,183 @@
             </div>
         </div>
     </footer>
+
+    <!-- OWNER WEB ANALYTICS DASHBOARD MODAL -->
+    <div id="owner-dashboard-modal" class="fixed inset-0 z-50 bg-charcoal-950/90 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+        <div class="bg-charcoal-900 text-white max-w-5xl w-full rounded-3xl overflow-hidden shadow-2xl relative max-h-[92vh] flex flex-col border border-charcoal-800">
+            
+            <!-- DASHBOARD HEADER -->
+            <div class="p-6 bg-charcoal-950 border-b border-charcoal-800 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gold-500/20 text-gold-500 flex items-center justify-center">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-lg font-medium text-white">MY HOMES MAKER — Owner Web Analytics</h3>
+                        <p class="text-[10px] text-gray-400">Live Traffic, Consultation Leads & Conversion Metrics</p>
+                    </div>
+                </div>
+                <button onclick="closeOwnerDashboard()" class="text-gray-400 hover:text-white text-2xl w-8 h-8 flex items-center justify-center">&times;</button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-6">
+                
+                <!-- KPI STAT CARDS -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-charcoal-800/60 p-4 rounded-2xl border border-charcoal-700/60">
+                        <div class="flex justify-between items-center text-xs text-gray-400 mb-2">
+                            <span>Total Site Visitors</span>
+                            <i class="fa-solid fa-users text-gold-500"></i>
+                        </div>
+                        <div class="text-2xl font-serif font-bold text-white" id="stat-visitors">14,280</div>
+                        <span class="text-[10px] text-emerald-400 flex items-center gap-1 mt-1 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> +18.4% vs last month</span>
+                    </div>
+
+                    <div class="bg-charcoal-800/60 p-4 rounded-2xl border border-charcoal-700/60">
+                        <div class="flex justify-between items-center text-xs text-gray-400 mb-2">
+                            <span>Consultation Leads</span>
+                            <i class="fa-solid fa-paper-plane text-gold-500"></i>
+                        </div>
+                        <div class="text-2xl font-serif font-bold text-white" id="stat-leads">342</div>
+                        <span class="text-[10px] text-emerald-400 flex items-center gap-1 mt-1 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> +12.1% form submissions</span>
+                    </div>
+
+                    <div class="bg-charcoal-800/60 p-4 rounded-2xl border border-charcoal-700/60">
+                        <div class="flex justify-between items-center text-xs text-gray-400 mb-2">
+                            <span>WhatsApp Clicks</span>
+                            <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+                        </div>
+                        <div class="text-2xl font-serif font-bold text-white" id="stat-whatsapp">189</div>
+                        <span class="text-[10px] text-emerald-400 flex items-center gap-1 mt-1 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> +24 new chats</span>
+                    </div>
+
+                    <div class="bg-charcoal-800/60 p-4 rounded-2xl border border-charcoal-700/60">
+                        <div class="flex justify-between items-center text-xs text-gray-400 mb-2">
+                            <span>Conversion Rate</span>
+                            <i class="fa-solid fa-bullseye text-gold-500"></i>
+                        </div>
+                        <div class="text-2xl font-serif font-bold text-white">4.8%</div>
+                        <span class="text-[10px] text-amber-400 flex items-center gap-1 mt-1 font-semibold"><i class="fa-solid fa-check-circle"></i> High Intent Inquiries</span>
+                    </div>
+                </div>
+
+                <!-- ANALYTICS CHART & TRAFFIC BREAKDOWN -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- SVG BAR CHART -->
+                    <div class="lg:col-span-8 bg-charcoal-800/40 p-5 rounded-2xl border border-charcoal-700/60 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-serif text-sm text-white font-medium">Monthly Inquiries & Lead Growth (2026)</h4>
+                            <span class="text-[10px] bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full uppercase tracking-wider">Live Analytics</span>
+                        </div>
+                        
+                        <!-- BAR CHART REPRESENTATION -->
+                        <div class="h-44 flex items-end justify-between gap-3 pt-6 px-2 border-b border-charcoal-700">
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full bg-gold-500/40 hover:bg-gold-500 rounded-t-lg transition-all" style="height: 45%;"></div>
+                                <span class="text-[10px] text-gray-400">Mar</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full bg-gold-500/50 hover:bg-gold-500 rounded-t-lg transition-all" style="height: 60%;"></div>
+                                <span class="text-[10px] text-gray-400">Apr</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full bg-gold-500/60 hover:bg-gold-500 rounded-t-lg transition-all" style="height: 55%;"></div>
+                                <span class="text-[10px] text-gray-400">May</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full bg-gold-500/70 hover:bg-gold-500 rounded-t-lg transition-all" style="height: 75%;"></div>
+                                <span class="text-[10px] text-gray-400">Jun</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full bg-gold-500/80 hover:bg-gold-500 rounded-t-lg transition-all" style="height: 85%;"></div>
+                                <span class="text-[10px] text-gray-400">Jul</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full bg-gold-500 hover:bg-gold-500 rounded-t-lg transition-all" style="height: 98%;"></div>
+                                <span class="text-[10px] text-gold-500 font-bold">Aug</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRAFFIC SOURCES -->
+                    <div class="lg:col-span-4 bg-charcoal-800/40 p-5 rounded-2xl border border-charcoal-700/60 space-y-4">
+                        <h4 class="font-serif text-sm text-white font-medium">Top Traffic Channels</h4>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <div class="flex justify-between text-gray-300 text-[11px] mb-1">
+                                    <span>Instagram & Direct Social</span>
+                                    <span class="font-semibold text-gold-500">48%</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-charcoal-700 rounded-full overflow-hidden">
+                                    <div class="bg-gold-500 h-full rounded-full" style="width: 48%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-gray-300 text-[11px] mb-1">
+                                    <span>Google Organic Search</span>
+                                    <span class="font-semibold text-gold-500">32%</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-charcoal-700 rounded-full overflow-hidden">
+                                    <div class="bg-gold-500 h-full rounded-full" style="width: 32%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-gray-300 text-[11px] mb-1">
+                                    <span>Direct Referrals & Calls</span>
+                                    <span class="font-semibold text-gold-500">20%</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-charcoal-700 rounded-full overflow-hidden">
+                                    <div class="bg-gold-500 h-full rounded-full" style="width: 20%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CLIENT INQUIRY LOGS TABLE -->
+                <div class="bg-charcoal-800/40 p-5 rounded-2xl border border-charcoal-700/60 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-serif text-sm text-white font-medium">Recent Consultation Requests Log</h4>
+                        <button onclick="addMockLead()" class="px-3 py-1 bg-gold-500 text-charcoal-950 text-[10px] uppercase font-bold tracking-wider rounded-lg hover:bg-white transition-colors">Simulate New Lead</button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-charcoal-950 text-gray-400 uppercase text-[10px] tracking-wider border-b border-charcoal-800">
+                                <tr>
+                                    <th class="p-3">Client Name</th>
+                                    <th class="p-3">Phone</th>
+                                    <th class="p-3">Email</th>
+                                    <th class="p-3">Service</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-table-body" class="divide-y divide-charcoal-800">
+                                <tr>
+                                    <td class="p-3 font-medium text-white">Eleanor Vance</td>
+                                    <td class="p-3">+1 (555) 234-5678</td>
+                                    <td class="p-3">eleanor@vance.com</td>
+                                    <td class="p-3"><span class="bg-taupe-700/50 text-gold-500 px-2 py-0.5 rounded text-[10px]">Turnkey Villa</span></td>
+                                    <td class="p-3"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-semibold">New Request</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium text-white">Marcus Sterling</td>
+                                    <td class="p-3">+1 (555) 987-6543</td>
+                                    <td class="p-3">m.sterling@domain.com</td>
+                                    <td class="p-3"><span class="bg-taupe-700/50 text-gold-500 px-2 py-0.5 rounded text-[10px]">Luxury Penthouse</span></td>
+                                    <td class="p-3"><span class="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded text-[10px] font-semibold">Contacted</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!-- FLOATING ACTION BUTTONS (WHATSAPP, CALL, BACK TO TOP) -->
     <div class="fixed bottom-6 right-6 z-30 flex flex-col gap-3">
@@ -1066,6 +1306,30 @@
 
         searchInput.addEventListener('input', filterGallery);
 
+        // COMPANY PORTFOLIO TAB FILTERING
+        const portfolioTabs = document.querySelectorAll('#portfolio-tabs .portfolio-tab');
+        const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+        portfolioTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                portfolioTabs.forEach(t => {
+                    t.classList.remove('active', 'bg-charcoal-900', 'text-white', 'border-charcoal-900');
+                    t.classList.add('border-taupe-300', 'text-charcoal-800');
+                });
+                tab.classList.add('active', 'bg-charcoal-900', 'text-white', 'border-charcoal-900');
+                tab.classList.remove('border-taupe-300', 'text-charcoal-800');
+
+                const filter = tab.getAttribute('data-pfilter');
+                portfolioCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-pcat') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
         // LIGHTBOX
         const galleryImages = [
             { src: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80', caption: 'Living Room Architecture & Soft Lighting' },
@@ -1145,6 +1409,34 @@
             showTestimonial((currentTestIndex + 1) % slides.length);
         }, 6000);
 
+        // OWNER ANALYTICS DASHBOARD FUNCTIONS
+        function openOwnerDashboard() {
+            document.getElementById('owner-dashboard-modal').classList.remove('hidden');
+        }
+
+        function closeOwnerDashboard() {
+            document.getElementById('owner-dashboard-modal').classList.add('hidden');
+        }
+
+        let mockLeadCount = 342;
+        function addMockLead() {
+            mockLeadCount++;
+            document.getElementById('stat-leads').innerText = mockLeadCount;
+
+            const tbody = document.getElementById('leads-table-body');
+            const newRow = document.createElement('tr');
+            newRow.className = "bg-charcoal-800/80 animate-pulse";
+            newRow.innerHTML = `
+                <td class="p-3 font-medium text-white">Sophia Laurent</td>
+                <td class="p-3">+1 (555) 888-1234</td>
+                <td class="p-3">sophia@laurent.com</td>
+                <td class="p-3"><span class="bg-taupe-700/50 text-gold-500 px-2 py-0.5 rounded text-[10px]">Bespoke Interior</span></td>
+                <td class="p-3"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-semibold">Just Now</span></td>
+            `;
+            tbody.insertBefore(newRow, tbody.firstChild);
+            setTimeout(() => newRow.classList.remove('animate-pulse'), 2000);
+        }
+
         // PROJECT DETAIL MODAL
         function openProjectModal(title, category, imgSrc, description) {
             document.getElementById('modal-project-title').textContent = title;
@@ -1166,7 +1458,7 @@
         function handleFormSubmit(event) {
             event.preventDefault();
             const name = document.getElementById('name').value;
-            alert(`Thank you, ${name}. Your consultation request has been successfully submitted to MY HOMES MAKER.`);
+            alert(`Thank you, ${name}. Your consultation request has been received by MY HOMES MAKER.`);
             document.getElementById('contact-form').reset();
         }
     </script>
