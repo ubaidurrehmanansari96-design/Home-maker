@@ -1,0 +1,1737 @@
+import React, { useState, useEffect, useMemo } from 'react';
+
+// ==========================================
+// MY HOMES MAKER - Premium Web Application
+// ==========================================
+
+export default function MyHomesMakerApp() {
+  // Navigation & Page State
+  const [activeTab, setActiveTab] = useState('home'); // home, about, services, projects, gallery, testimonials, faq, contact, privacy, terms, 404
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Selected Item Modals
+  const [selectedService, setSelectedService] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [lightboxImage, setLightboxImage] = useState(null);
+
+  // Gallery / Projects Filter State
+  const [projectCategory, setProjectCategory] = useState('All');
+  const [galleryCategory, setGalleryCategory] = useState('All');
+
+  // Contact Form State
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    service: 'Interior Design',
+    message: ''
+  });
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
+
+  // FAQ Accordion State
+  const [expandedFaq, setExpandedFaq] = useState(0);
+
+  // Testimonial Carousel Index
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  // Scroll detection for navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Handle Page Routing / View Switching smoothly
+  const navigateTo = (pageId) => {
+    setActiveTab(pageId);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Automated Testimonial Rotation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonialsData.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Form Submit Handler with Validation
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    if (!contactForm.name.trim() || !contactForm.phone.trim() || !contactForm.email.trim()) {
+      setFormError('Please fill in all required fields (Name, Phone, and Email).');
+      return;
+    }
+    const phoneRegex = /^[0-9+\s-]{8,15}$/;
+    if (!phoneRegex.test(contactForm.phone)) {
+      setFormError('Please enter a valid contact phone number.');
+      return;
+    }
+    setFormError('');
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setContactForm({ name: '', phone: '', email: '', service: 'Interior Design', message: '' });
+    }, 5000);
+  };
+
+  // WhatsApp Redirect Generator
+  const triggerWhatsApp = (customMsg = '') => {
+    const defaultText = customMsg || `Hello MY HOMES MAKER team! I would like to enquire about your interior design & construction services.`;
+    const url = `https://wa.me/919870632368?text=${encodeURIComponent(defaultText)}`;
+    window.open(url, '_blank');
+  };
+
+  // Filtered Services & Projects for Search
+  const filteredSearchItems = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const q = searchQuery.toLowerCase();
+    const servicesMatch = servicesData.filter(s => s.title.toLowerCase().includes(q) || s.description.toLowerCase().includes(q));
+    const projectsMatch = projectsData.filter(p => p.title.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || p.location.toLowerCase().includes(q));
+    return { servicesMatch, projectsMatch };
+  }, [searchQuery]);
+
+  return (
+    <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] font-sans selection:bg-[#C5A880] selection:text-white flex flex-col relative overflow-x-hidden">
+      
+      {/* ==========================================
+          HEADER / STICKY NAVIGATION
+      ========================================== */}
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-neutral-200/60 py-3' : 'bg-white/60 backdrop-blur-sm border-b border-neutral-100 py-4'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          
+          {/* Logo */}
+          <button onClick={() => navigateTo('home')} className="flex items-center gap-3 group text-left">
+            <div className="w-10 h-10 rounded-lg bg-[#121212] flex items-center justify-center text-[#C5A880] font-bold text-xl shadow-md border border-[#C5A880]/30 group-hover:bg-[#C5A880] group-hover:text-[#121212] transition-all duration-300">
+              M
+            </div>
+            <div>
+              <span className="block text-lg font-bold tracking-tight text-[#121212] uppercase leading-none">MY HOMES MAKER</span>
+              <span className="block text-[10px] tracking-widest text-[#B89762] uppercase font-medium mt-0.5">Interior & Construction</span>
+            </div>
+          </button>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'about', label: 'About' },
+              { id: 'services', label: 'Services' },
+              { id: 'projects', label: 'Projects' },
+              { id: 'gallery', label: 'Gallery' },
+              { id: 'testimonials', label: 'Testimonials' },
+              { id: 'faq', label: 'FAQ' },
+              { id: 'contact', label: 'Contact' },
+            ].map((link) => (
+              <button
+                key={link.id}
+                onClick={() => navigateTo(link.id)}
+                className={`text-sm font-medium transition-colors relative py-1 ${activeTab === link.id ? 'text-[#121212] font-semibold' : 'text-neutral-600 hover:text-[#C5A880]'}`}
+              >
+                {link.label}
+                {activeTab === link.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C5A880] rounded-full animate-fade-in" />
+                )}
+              </button>
+            ))}
+          </nav>
+
+          {/* Right Action Controls */}
+          <div className="hidden sm:flex items-center gap-3">
+            {/* Quick Search Button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="p-2 rounded-full text-neutral-600 hover:text-[#121212] hover:bg-neutral-100 transition"
+              title="Search Services & Projects"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
+
+            {/* Direct Call Quick Action */}
+            <a
+              href="tel:+919870632368"
+              className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-neutral-800 bg-neutral-100 hover:bg-neutral-200 rounded-full transition flex items-center gap-1.5"
+            >
+              <svg className="w-3.5 h-3.5 text-[#C5A880]" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></a strokeLinecap="round"/> Call Us
+            </a>
+
+            {/* CTA Button */}
+            <button
+              onClick={() => navigateTo('contact')}
+              className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#121212] hover:bg-[#C5A880] hover:text-[#121212] rounded-full shadow-sm transition-all duration-300"
+            >
+              Free Consultation
+            </button>
+          </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg text-neutral-800 hover:bg-neutral-100 transition"
+            aria-label="Toggle Menu"
+          >
+            {mobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            )}
+          </button>
+
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-white border-b border-neutral-200 px-4 pt-3 pb-6 space-y-2 shadow-xl animate-fade-in">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'about', label: 'About Company' },
+              { id: 'services', label: 'All Services (11)' },
+              { id: 'projects', label: 'Projects Showcase' },
+              { id: 'gallery', label: 'Photo Gallery' },
+              { id: 'testimonials', label: 'Client Reviews' },
+              { id: 'faq', label: 'FAQ' },
+              { id: 'contact', label: 'Get in Touch' },
+            ].map((link) => (
+              <button
+                key={link.id}
+                onClick={() => navigateTo(link.id)}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium text-sm transition-all ${activeTab === link.id ? 'bg-[#121212] text-white' : 'text-neutral-700 hover:bg-neutral-100'}`}
+              >
+                {link.label}
+              </button>
+            ))}
+            <div className="pt-4 border-t border-neutral-100 flex flex-col gap-2">
+              <button
+                onClick={() => { setSearchOpen(true); setMobileMenuOpen(false); }}
+                className="w-full py-2.5 px-4 text-center text-xs font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 rounded-lg"
+              >
+                🔍 Search Website
+              </button>
+              <button
+                onClick={() => navigateTo('contact')}
+                className="w-full py-3 text-center text-xs font-bold uppercase tracking-wider text-white bg-[#C5A880] rounded-lg shadow-md"
+              >
+                Get Free Consultation
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ==========================================
+          SEARCH PALETTE MODAL
+      ========================================== */}
+      {searchOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-20 px-4 animate-fade-in">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border border-neutral-200">
+            <div className="p-4 border-b border-neutral-100 flex items-center gap-3">
+              <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input
+                type="text"
+                placeholder="Search services, floor plans, 3D designs, kitchens..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+                className="w-full text-sm outline-none text-neutral-800 placeholder-neutral-400"
+              />
+              <button onClick={() => setSearchOpen(false)} className="text-neutral-400 hover:text-neutral-700 p-1 text-sm font-semibold">
+                ESC
+              </button>
+            </div>
+            <div className="p-4 max-h-[60vh] overflow-y-auto">
+              {!searchQuery.trim() ? (
+                <div className="text-center py-8 text-neutral-400 text-sm">
+                  Start typing to search services, projects, Vastu tips, or floor plans...
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {filteredSearchItems.servicesMatch.length > 0 && (
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#C5A880] mb-2">Services ({filteredSearchItems.servicesMatch.length})</h4>
+                      <div className="space-y-1">
+                        {filteredSearchItems.servicesMatch.map(s => (
+                          <div
+                            key={s.id}
+                            onClick={() => { setSelectedService(s); setSearchOpen(false); }}
+                            className="p-3 hover:bg-neutral-50 rounded-xl cursor-pointer transition flex justify-between items-center"
+                          >
+                            <div>
+                              <div className="font-semibold text-sm text-neutral-800">{s.title}</div>
+                              <div className="text-xs text-neutral-500 line-clamp-1">{s.description}</div>
+                            </div>
+                            <span className="text-xs font-bold text-[#C5A880]">View Details &rarr;</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {filteredSearchItems.projectsMatch.length > 0 && (
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#C5A880] mb-2">Projects ({filteredSearchItems.projectsMatch.length})</h4>
+                      <div className="space-y-1">
+                        {filteredSearchItems.projectsMatch.map(p => (
+                          <div
+                            key={p.id}
+                            onClick={() => { setSelectedProject(p); setSearchOpen(false); }}
+                            className="p-3 hover:bg-neutral-50 rounded-xl cursor-pointer transition flex items-center gap-3"
+                          >
+                            <img src={p.image} alt={p.title} className="w-12 h-12 rounded-lg object-cover" />
+                            <div>
+                              <div className="font-semibold text-sm text-neutral-800">{p.title}</div>
+                              <div className="text-xs text-neutral-500">{p.category} &bull; {p.location}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {filteredSearchItems.servicesMatch.length === 0 && filteredSearchItems.projectsMatch.length === 0 && (
+                    <div className="text-center py-8 text-neutral-500 text-sm">
+                      No matching services or projects found for "{searchQuery}".
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          MAIN CONTENT AREA / PAGE ROUTER
+      ========================================== */}
+      <main className="flex-grow pt-20">
+
+        {/* --------------------------------------
+            1. HOME PAGE
+        -------------------------------------- */}
+        {activeTab === 'home' && (
+          <div className="animate-fade-in space-y-24">
+            
+            {/* Hero Section */}
+            <section className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden pt-8">
+              {/* Subtle background glow */}
+              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C5A880]/10 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="max-w-6xl mx-auto text-center relative z-10 space-y-8">
+                
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900 text-white text-xs font-semibold tracking-wider uppercase border border-[#C5A880]/40 shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#C5A880] animate-pulse" />
+                  Premium Interior Design & Civil Construction
+                </div>
+
+                {/* Main Headline */}
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#121212] leading-[1.15]">
+                  Premium Interior Design & <br className="hidden sm:inline" />
+                  <span className="font-bold bg-gradient-to-r from-[#121212] via-[#555] to-[#B89762] bg-clip-text text-transparent">
+                    Construction Solutions
+                  </span>
+                </h1>
+
+                {/* Subheadline */}
+                <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto font-light leading-relaxed">
+                  Design. Build. Transform. We craft bespoke residential sanctuaries, high-impact commercial spaces, and engineered architectural masterworks.
+                </p>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                  <button
+                    onClick={() => navigateTo('contact')}
+                    className="w-full sm:w-auto px-8 py-4 bg-[#121212] hover:bg-[#C5A880] text-white hover:text-[#121212] text-sm font-bold uppercase tracking-widest rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
+                  >
+                    Get Free Consultation
+                  </button>
+                  <button
+                    onClick={() => navigateTo('projects')}
+                    className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-neutral-100 text-[#121212] border border-neutral-300 text-sm font-semibold uppercase tracking-widest rounded-full transition-all duration-300"
+                  >
+                    View Completed Projects
+                  </button>
+                </div>
+
+                {/* Hero Showcase Image Frame */}
+                <div className="pt-10 max-w-5xl mx-auto">
+                  <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                    <img
+                      src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+                      alt="MY HOMES MAKER Modern Interior"
+                      className="w-full h-[380px] sm:h-[500px] object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end justify-between p-6 sm:p-10 text-left text-white">
+                      <div>
+                        <span className="text-xs uppercase tracking-widest text-[#C5A880] font-bold">Featured Architectural Masterpiece</span>
+                        <h3 className="text-xl sm:text-3xl font-semibold mt-1">Luxury Villa & Turnkey Interior</h3>
+                        <p className="text-xs sm:text-sm text-neutral-300 mt-1">Full Turnkey Civil Construction + Customized Modular Decor</p>
+                      </div>
+                      <button
+                        onClick={() => navigateTo('projects')}
+                        className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 backdrop-blur-md hover:bg-white hover:text-[#121212] text-white text-xs font-bold uppercase transition"
+                      >
+                        Explore Project &rarr;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Key Statistics Bar */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 text-center border-t border-neutral-200">
+                  <div>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-[#121212]">650+</div>
+                    <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider mt-1">Projects Completed</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-[#121212]">500+</div>
+                    <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider mt-1">Satisfied Clients</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-[#121212]">12+</div>
+                    <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider mt-1">Years Experience</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-[#121212]">4.8★</div>
+                    <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider mt-1">Client Rating (275+ Reviews)</div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+            {/* Quick Services Preview */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">World-Class Expertise</span>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-[#121212] mt-1">End-to-End Design & Build Services</h2>
+                </div>
+                <button
+                  onClick={() => navigateTo('services')}
+                  className="mt-4 md:mt-0 text-sm font-bold text-[#121212] hover:text-[#C5A880] flex items-center gap-2 group transition"
+                >
+                  View All 11 Services <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {servicesData.slice(0, 3).map((service) => (
+                  <div
+                    key={service.id}
+                    onClick={() => setSelectedService(service)}
+                    className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:border-[#C5A880]/50 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center text-[#121212] group-hover:bg-[#121212] group-hover:text-[#C5A880] transition-colors mb-6 text-xl">
+                        {service.icon}
+                      </div>
+                      <h3 className="text-xl font-bold text-[#121212] mb-3 group-hover:text-[#B89762] transition-colors">{service.title}</h3>
+                      <p className="text-neutral-600 text-sm leading-relaxed mb-6">{service.description}</p>
+                    </div>
+                    <div className="flex items-center justify-between text-xs font-bold text-[#121212] uppercase tracking-wider pt-4 border-t border-neutral-100">
+                      <span>Explore Overview</span>
+                      <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Why Choose Us Highlight */}
+            <section className="bg-[#121212] text-white py-20 px-4 sm:px-6 lg:px-8 rounded-3xl max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#C5A880]">Why MY HOMES MAKER</span>
+                  <h2 className="text-3xl sm:text-5xl font-light leading-tight">
+                    Crafting Spaces with <span className="font-bold text-[#C5A880]">Precision</span> & Uncompromising Quality
+                  </h2>
+                  <p className="text-neutral-400 text-sm sm:text-base leading-relaxed">
+                    From initial 3D visualization and floor planning to full structural civil execution and luxury soft furnishings, MY HOMES MAKER provides a single, seamless point of contact for your dream project.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                    <div className="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                      <div className="text-[#C5A880] font-bold text-lg mb-1">✓ 100% Transparent Budgeting</div>
+                      <div className="text-xs text-neutral-400">Zero hidden costs, fixed timelines, clear milestone breakdowns.</div>
+                    </div>
+                    <div className="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                      <div className="text-[#C5A880] font-bold text-lg mb-1">✓ Vastu Compliant Layouts</div>
+                      <div className="text-xs text-neutral-400">Integrated scientific Vastu principles for prosperity and harmony.</div>
+                    </div>
+                    <div className="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                      <div className="text-[#C5A880] font-bold text-lg mb-1">✓ Premium Material Guarantee</div>
+                      <div className="text-xs text-neutral-400">Top-tier plywood, hardware, paints, tiles, and fittings utilized.</div>
+                    </div>
+                    <div className="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                      <div className="text-[#C5A880] font-bold text-lg mb-1">✓ End-to-End Turnkey Solution</div>
+                      <div className="text-xs text-neutral-400">Civil construction, electrical, plumbing, modular kitchens & decor.</div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <button
+                      onClick={() => navigateTo('about')}
+                      className="px-6 py-3 bg-[#C5A880] text-[#121212] hover:bg-white text-xs font-bold uppercase tracking-wider rounded-full transition duration-300"
+                    >
+                      Read Our Full Story
+                    </button>
+                  </div>
+                </div>
+
+                {/* Image Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Interior Detail" className="rounded-2xl object-cover h-64 w-full shadow-lg" />
+                  <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80" alt="Construction Execution" className="rounded-2xl object-cover h-64 w-full shadow-lg mt-8" />
+                </div>
+              </div>
+            </section>
+
+            {/* Testimonials Preview */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-2xl mx-auto mb-12">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Client Praise</span>
+                <h2 className="text-3xl font-bold text-[#121212] mt-1">Trusted by 500+ Homeowners & Businesses</h2>
+              </div>
+
+              <div className="bg-white rounded-3xl p-8 sm:p-12 border border-neutral-200/80 shadow-lg relative max-w-4xl mx-auto text-center">
+                <div className="flex justify-center text-amber-400 mb-4 text-xl">
+                  {'★'.repeat(testimonialsData[currentTestimonial].rating)}
+                </div>
+                <blockquote className="text-lg sm:text-xl font-light text-neutral-800 leading-relaxed italic mb-8">
+                  "{testimonialsData[currentTestimonial].text}"
+                </blockquote>
+                <div>
+                  <div className="font-bold text-[#121212]">{testimonialsData[currentTestimonial].name}</div>
+                  <div className="text-xs text-neutral-500 mt-0.5">{testimonialsData[currentTestimonial].role} &bull; {testimonialsData[currentTestimonial].location}</div>
+                </div>
+
+                <div className="flex justify-center items-center gap-4 mt-8">
+                  <button
+                    onClick={() => setCurrentTestimonial((prev) => (prev === 0 ? testimonialsData.length - 1 : prev - 1))}
+                    className="p-2 rounded-full border border-neutral-200 hover:bg-neutral-100 transition"
+                  >
+                    &larr;
+                  </button>
+                  <span className="text-xs text-neutral-400 font-mono">{currentTestimonial + 1} / {testimonialsData.length}</span>
+                  <button
+                    onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonialsData.length)}
+                    className="p-2 rounded-full border border-neutral-200 hover:bg-neutral-100 transition"
+                  >
+                    &rarr;
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* Consultation CTA Banner */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-gradient-to-r from-[#121212] via-[#1E1E1E] to-[#121212] p-10 sm:p-16 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+                <div>
+                  <h2 className="text-2xl sm:text-4xl font-bold mb-2">Ready to Build or Renovate Your Dream Space?</h2>
+                  <p className="text-neutral-400 text-sm max-w-xl">
+                    Get in touch with our lead architects and interior designers today for a complimentary site visit & preliminary layout consultation.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                  <button
+                    onClick={() => triggerWhatsApp('Hi MY HOMES MAKER, I want to request a free site visit consultation.')}
+                    className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition flex items-center justify-center gap-2"
+                  >
+                    💬 WhatsApp Instant Inquiry
+                  </button>
+                  <button
+                    onClick={() => navigateTo('contact')}
+                    className="px-6 py-3.5 bg-[#C5A880] hover:bg-white text-[#121212] text-xs font-bold uppercase tracking-wider rounded-full transition flex items-center justify-center"
+                  >
+                    Book Site Visit
+                  </button>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            2. ABOUT PAGE
+        -------------------------------------- */}
+        {activeTab === 'about' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20 animate-fade-in">
+            
+            {/* Header */}
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">About MY HOMES MAKER</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                Architectural Innovation Meets <span className="font-bold">Artisanal Design</span>
+              </h1>
+              <p className="text-neutral-600 leading-relaxed text-sm sm:text-base">
+                Established with a passion for architectural finesse and residential luxury, MY HOMES MAKER is a full-service interior design & civil construction firm serving homeowners and corporate clients across Amroha, Moradabad, and Uttar Pradesh.
+              </p>
+            </div>
+
+            {/* Story & Vision */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <div className="inline-block text-xs font-bold uppercase tracking-wider text-[#C5A880] bg-[#121212] px-3 py-1 rounded-md">
+                  Our Story
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#121212]">
+                  Transforming Ordinary Blueprints into Iconic Living Experiences
+                </h2>
+                <p className="text-neutral-600 text-sm leading-relaxed">
+                  Founded by visionary planners and civil construction specialists, MY HOMES MAKER was built on a simple promise: deliver pristine architectural design, uncompromising structural integrity, and exquisite modern interiors without budget overruns.
+                </p>
+                <p className="text-neutral-600 text-sm leading-relaxed">
+                  Over the past 12+ years, our team of architects, 3D visualizers, Vastu consultants, and skilled artisans have completed over 650+ residential and commercial projects.
+                </p>
+
+                <div className="grid grid-cols-2 gap-6 pt-4 border-t border-neutral-200">
+                  <div>
+                    <h4 className="font-bold text-[#121212] text-base">Our Mission</h4>
+                    <p className="text-xs text-neutral-500 mt-1">To craft timeless spaces that balance functional ergonomics, aesthetics, and structural durability.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#121212] text-base">Our Vision</h4>
+                    <p className="text-xs text-neutral-500 mt-1">To set the benchmark for luxury design & turnkey civil execution in Northern India.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80"
+                  alt="Architectural Planning Studio"
+                  className="rounded-3xl shadow-2xl w-full h-[450px] object-cover"
+                />
+                <div className="absolute -bottom-6 -left-6 bg-[#121212] text-white p-6 rounded-2xl shadow-xl max-w-xs border border-[#C5A880]/40">
+                  <div className="text-3xl font-bold text-[#C5A880]">12+ Years</div>
+                  <div className="text-xs text-neutral-300 mt-1">Of Design Excellence & Civil Engineering Mastery</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Core Pillars */}
+            <div>
+              <div className="text-center max-w-2xl mx-auto mb-12">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#121212]">The Pillars of MY HOMES MAKER</h2>
+                <p className="text-neutral-500 text-sm mt-2">What sets our design boutique apart from standard contractors.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {[
+                  { title: "Turnkey Execution", desc: "Single window responsibility from raw brickwork construction to final curtain hanging.", icon: "🏗️" },
+                  { title: "3D Photorealism", desc: "View every corner of your home in 4K photorealistic 3D before a single hammer falls.", icon: "📐" },
+                  { title: "Scientific Vastu", desc: "Harmonize energy flows with custom layout adjustments guided by certified experts.", icon: "🧭" },
+                  { title: "On-Time Delivery", desc: "Strict contractual timelines with penalty-backed milestone schedules.", icon: "⏱️" }
+                ].map((pillar, idx) => (
+                  <div key={idx} className="bg-white p-6 rounded-2xl border border-neutral-200 shadow-sm hover:border-[#C5A880] transition">
+                    <div className="text-3xl mb-4">{pillar.icon}</div>
+                    <h3 className="font-bold text-neutral-900 text-lg mb-2">{pillar.title}</h3>
+                    <p className="text-xs text-neutral-600 leading-relaxed">{pillar.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            3. SERVICES PAGE (ALL 11 SERVICES)
+        -------------------------------------- */}
+        {activeTab === 'services' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 animate-fade-in">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Comprehensive Design & Build</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                Our Specialized <span className="font-bold">Services</span>
+              </h1>
+              <p className="text-neutral-600 text-sm sm:text-base">
+                Click on any service below to review detailed execution workflows, architectural specifications, and sample image portfolios.
+              </p>
+            </div>
+
+            {/* Services Grid (11 Services) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {servicesData.map((service) => (
+                <div
+                  key={service.id}
+                  onClick={() => setSelectedService(service)}
+                  className="bg-white rounded-2xl overflow-hidden border border-neutral-200/90 shadow-sm hover:shadow-xl hover:border-[#C5A880] transition-all duration-300 cursor-pointer flex flex-col group"
+                >
+                  <div className="h-48 overflow-hidden relative">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-semibold">
+                      {service.tag}
+                    </div>
+                  </div>
+                  <div className="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">{service.icon}</span>
+                        <h3 className="text-xl font-bold text-[#121212] group-hover:text-[#B89762] transition-colors">{service.title}</h3>
+                      </div>
+                      <p className="text-neutral-600 text-sm leading-relaxed mb-4">{service.description}</p>
+                    </div>
+                    <div className="pt-4 border-t border-neutral-100 flex items-center justify-between text-xs font-bold text-[#121212]">
+                      <span>View Specifications & Process</span>
+                      <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            4. PROJECTS PAGE & MASONRY GALLERY
+        -------------------------------------- */}
+        {activeTab === 'projects' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 animate-fade-in">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Portfolio Showcase</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                Our Featured <span className="font-bold">Projects</span>
+              </h1>
+              <p className="text-neutral-600 text-sm">
+                Explore real completed projects executed by MY HOMES MAKER across Uttar Pradesh & NCR.
+              </p>
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {['All', 'Residential', 'Commercial', 'Kitchen', 'Bedroom', 'Living Room', 'Construction'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setProjectCategory(cat)}
+                  className={`px-5 py-2 text-xs font-bold uppercase tracking-wider rounded-full transition-all ${projectCategory === cat ? 'bg-[#121212] text-white shadow-md' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Masonry Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projectsData
+                .filter(p => projectCategory === 'All' || p.category === projectCategory)
+                .map((project) => (
+                  <div
+                    key={project.id}
+                    onClick={() => setSelectedProject(project)}
+                    className="group bg-white rounded-2xl overflow-hidden border border-neutral-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 text-white">
+                        <span className="text-xs font-bold uppercase tracking-wider bg-[#C5A880] text-black px-3 py-1 rounded-full">
+                          View Detailed Case Study
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <div className="flex items-center justify-between text-xs text-neutral-400 font-medium mb-1">
+                        <span>{project.category}</span>
+                        <span>{project.location}</span>
+                      </div>
+                      <h3 className="text-lg font-bold text-[#121212] group-hover:text-[#B89762] transition">{project.title}</h3>
+                      <p className="text-xs text-neutral-500 mt-1 line-clamp-2">{project.summary}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            5. PHOTO GALLERY PAGE (WITH LIGHTBOX)
+        -------------------------------------- */}
+        {activeTab === 'gallery' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 animate-fade-in">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Visual Inspiration</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                Interior & Construction <span className="font-bold">Gallery</span>
+              </h1>
+              <p className="text-neutral-600 text-sm">
+                Click any photograph to launch high-resolution lightbox inspection view.
+              </p>
+            </div>
+
+            {/* Gallery Filter */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {['All', 'Living Room', 'Kitchen', 'Bedroom', 'Bathroom', 'Exterior & Site'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setGalleryCategory(cat)}
+                  className={`px-4 py-2 text-xs font-semibold rounded-full transition ${galleryCategory === cat ? 'bg-[#121212] text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Gallery Grid */}
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+              {galleryPhotos
+                .filter(p => galleryCategory === 'All' || p.category === galleryCategory)
+                .map((photo) => (
+                  <div
+                    key={photo.id}
+                    onClick={() => setLightboxImage(photo)}
+                    className="break-inside-avoid relative rounded-2xl overflow-hidden group cursor-pointer border border-neutral-200 shadow-sm hover:shadow-2xl transition"
+                  >
+                    <img src={photo.url} alt={photo.title} className="w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white p-4 text-center">
+                      <div>
+                        <div className="text-xs uppercase tracking-widest text-[#C5A880] font-bold">{photo.category}</div>
+                        <div className="font-semibold text-base mt-1">{photo.title}</div>
+                        <div className="text-xs text-neutral-300 mt-2">🔍 Click to Expand</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            6. TESTIMONIALS PAGE
+        -------------------------------------- */}
+        {activeTab === 'testimonials' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 animate-fade-in">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Client Feedback</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                What Our <span className="font-bold">Clients Say</span>
+              </h1>
+              <p className="text-neutral-600 text-sm">
+                Authentic reviews from homeowners and business partners across Amroha and NCR.
+              </p>
+            </div>
+
+            {/* Rating Summary Box */}
+            <div className="bg-white p-8 rounded-3xl border border-neutral-200 shadow-sm flex flex-col sm:flex-row items-center justify-around gap-6 max-w-3xl mx-auto text-center sm:text-left">
+              <div>
+                <div className="text-5xl font-extrabold text-[#121212]">4.8 <span className="text-2xl font-light text-neutral-400">/ 5.0</span></div>
+                <div className="text-amber-400 text-lg mt-1">★★★★★</div>
+                <div className="text-xs text-neutral-500 mt-1">Based on 275+ verified client ratings</div>
+              </div>
+              <div className="h-12 w-px bg-neutral-200 hidden sm:block" />
+              <div>
+                <div className="font-bold text-[#121212]">MagicPin & JustDial Verified</div>
+                <div className="text-xs text-neutral-500 mt-1">Top-Rated Interior Design Firm in Amroha</div>
+                <button
+                  onClick={() => triggerWhatsApp('Hello! I would like to check client references in my area.')}
+                  className="mt-3 text-xs font-bold text-[#C5A880] hover:underline uppercase tracking-wider block"
+                >
+                  Request Reference Contacts &rarr;
+                </button>
+              </div>
+            </div>
+
+            {/* Testimonials List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {testimonialsData.map((review) => (
+                <div key={review.id} className="bg-white rounded-2xl p-6 border border-neutral-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-amber-400 text-sm">{'★'.repeat(review.rating)}</div>
+                      <span className="text-[10px] bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-full font-semibold uppercase">{review.service}</span>
+                    </div>
+                    <p className="text-neutral-700 text-sm italic leading-relaxed mb-6">"{review.text}"</p>
+                  </div>
+                  <div className="pt-4 border-t border-neutral-100 flex items-center justify-between text-xs">
+                    <div>
+                      <div className="font-bold text-[#121212]">{review.name}</div>
+                      <div className="text-neutral-400">{review.location}</div>
+                    </div>
+                    <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg> Verify Client
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            7. FAQ PAGE
+        -------------------------------------- */}
+        {activeTab === 'faq' && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 animate-fade-in">
+            
+            <div className="text-center space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Got Questions?</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                Frequently Asked <span className="font-bold">Questions</span>
+              </h1>
+              <p className="text-neutral-600 text-sm">
+                Everything you need to know about pricing, Vastu guidelines, materials, and turn-around times.
+              </p>
+            </div>
+
+            {/* FAQ Accordions */}
+            <div className="space-y-4">
+              {faqData.map((faq, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm transition"
+                >
+                  <button
+                    onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
+                    className="w-full text-left p-6 font-bold text-neutral-900 text-base sm:text-lg flex justify-between items-center gap-4 hover:text-[#C5A880] transition"
+                  >
+                    <span>{faq.q}</span>
+                    <span className="text-xl text-[#C5A880] font-mono">{expandedFaq === idx ? '−' : '+'}</span>
+                  </button>
+                  {expandedFaq === idx && (
+                    <div className="px-6 pb-6 text-neutral-600 text-sm sm:text-base leading-relaxed border-t border-neutral-100 pt-4 animate-fade-in">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Ask Direct Question Card */}
+            <div className="bg-[#121212] text-white rounded-3xl p-8 text-center space-y-4 shadow-xl">
+              <h3 className="text-xl font-bold">Have a custom question about your floor plan or site?</h3>
+              <p className="text-xs text-neutral-400 max-w-lg mx-auto">
+                Speak directly with our senior architectural lead for personalized guidance on construction estimates and design ideas.
+              </p>
+              <button
+                onClick={() => triggerWhatsApp('Hi MY HOMES MAKER, I have a specific question regarding my property plan.')}
+                className="px-6 py-3 bg-[#C5A880] text-[#121212] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-white transition"
+              >
+                Ask via WhatsApp
+              </button>
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            8. CONTACT PAGE
+        -------------------------------------- */}
+        {activeTab === 'contact' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16 animate-fade-in">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#B89762]">Get In Touch</span>
+              <h1 className="text-4xl sm:text-5xl font-light text-[#121212]">
+                Start Your <span className="font-bold">Project Today</span>
+              </h1>
+              <p className="text-neutral-600 text-sm">
+                Schedule a site consultation or request an architectural cost quote for your home or office.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              
+              {/* Working Contact Form */}
+              <div className="bg-white p-8 sm:p-10 rounded-3xl border border-neutral-200 shadow-xl space-y-6">
+                <h2 className="text-2xl font-bold text-[#121212]">Book Free Site Consultation</h2>
+                
+                {formSubmitted ? (
+                  <div className="p-6 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl space-y-3 animate-fade-in">
+                    <div className="text-xl font-bold">✓ Request Received!</div>
+                    <p className="text-sm">
+                      Thank you for contacting MY HOMES MAKER. Our design team will call you within 2 business hours to discuss your requirements.
+                    </p>
+                    <button
+                      onClick={() => triggerWhatsApp(`Name: ${contactForm.name}, Phone: ${contactForm.phone}, Service: ${contactForm.service}`)}
+                      className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider"
+                    >
+                      Instant WhatsApp Follow-up &rarr;
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleContactSubmit} className="space-y-4">
+                    {formError && (
+                      <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl font-semibold border border-red-200">
+                        {formError}
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-neutral-700 mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Rahul Sharma"
+                        value={contactForm.name}
+                        onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-[#C5A880] focus:ring-1 focus:ring-[#C5A880] outline-none text-sm"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase text-neutral-700 mb-1">Phone Number *</label>
+                        <input
+                          type="tel"
+                          placeholder="+91 9876543210"
+                          value={contactForm.phone}
+                          onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                          className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-[#C5A880] focus:ring-1 focus:ring-[#C5A880] outline-none text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase text-neutral-700 mb-1">Email Address *</label>
+                        <input
+                          type="email"
+                          placeholder="rahul@example.com"
+                          value={contactForm.email}
+                          onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                          className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-[#C5A880] focus:ring-1 focus:ring-[#C5A880] outline-none text-sm"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-neutral-700 mb-1">Required Service</label>
+                      <select
+                        value={contactForm.service}
+                        onChange={(e) => setContactForm({ ...contactForm, service: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-[#C5A880] outline-none text-sm bg-white"
+                      >
+                        {servicesData.map(s => (
+                          <option key={s.id} value={s.title}>{s.title}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-neutral-700 mb-1">Project Details / Message</label>
+                      <textarea
+                        rows="4"
+                        placeholder="Describe your plot area, room size, or renovation goals..."
+                        value={contactForm.message}
+                        onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-[#C5A880] outline-none text-sm"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-[#121212] hover:bg-[#C5A880] text-white hover:text-[#121212] font-bold text-xs uppercase tracking-widest rounded-xl transition duration-300 shadow-md"
+                    >
+                      Submit Consultation Request
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Office & Direct Contact Info */}
+              <div className="space-y-8">
+                <div className="bg-white p-8 rounded-3xl border border-neutral-200 shadow-sm space-y-6">
+                  <h3 className="text-xl font-bold text-[#121212]">Office & Boutique Details</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-100 flex items-center justify-center text-[#C5A880] text-lg shrink-0">📍</div>
+                      <div>
+                        <div className="font-bold text-sm text-[#121212]">Address</div>
+                        <div className="text-xs text-neutral-600 mt-0.5 leading-relaxed">
+                          1 B 234, Atrasi Rd, Near Avas Vikas Colony, Danishmandan, Amroha, Uttar Pradesh 244245
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-100 flex items-center justify-center text-[#C5A880] text-lg shrink-0">📞</div>
+                      <div>
+                        <div className="font-bold text-sm text-[#121212]">Phone Hotline</div>
+                        <a href="tel:+919870632368" className="text-xs text-[#C5A880] font-bold hover:underline mt-0.5 block">
+                          +91 98706 32368
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-100 flex items-center justify-center text-[#C5A880] text-lg shrink-0">💬</div>
+                      <div>
+                        <div className="font-bold text-sm text-[#121212]">Official WhatsApp</div>
+                        <button onClick={() => triggerWhatsApp()} className="text-xs text-emerald-600 font-bold hover:underline mt-0.5 block">
+                          Click to Chat Direct (+91 98706 32368)
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-100 flex items-center justify-center text-[#C5A880] text-lg shrink-0">⏰</div>
+                      <div>
+                        <div className="font-bold text-sm text-[#121212]">Business Hours</div>
+                        <div className="text-xs text-neutral-600 mt-0.5">
+                          Mon – Sat: 9:00 AM – 8:00 PM <br />
+                          Sunday: By Prior Appointment
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-neutral-100 flex items-center gap-3">
+                    <a
+                      href="https://www.instagram.com/myhomesmaker"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xs font-bold flex items-center gap-2 hover:opacity-90 transition"
+                    >
+                      Follow @myhomesmaker on Instagram
+                    </a>
+                  </div>
+                </div>
+
+                {/* Google Map Representation */}
+                <div className="bg-neutral-200 rounded-3xl overflow-hidden shadow-md h-64 relative border border-neutral-300">
+                  <iframe
+                    title="MY HOMES MAKER Location"
+                    src="https://maps.google.com/maps?q=1%20B%20234%20Atrasi%20Rd%20Avas%20Vikas%20Colony%20Amroha&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                    className="w-full h-full border-0"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* --------------------------------------
+            9. PRIVACY POLICY PAGE
+        -------------------------------------- */}
+        {activeTab === 'privacy' && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6 animate-fade-in text-neutral-700">
+            <h1 className="text-3xl font-bold text-[#121212]">Privacy Policy</h1>
+            <p className="text-xs text-neutral-400">Last updated: August 2026</p>
+            <p className="text-sm leading-relaxed">
+              At MY HOMES MAKER, we respect your privacy and are committed to protecting the personal information you share with us through our website and consultation forms.
+            </p>
+            <h2 className="text-xl font-bold text-[#121212] pt-4">1. Information We Collect</h2>
+            <p className="text-sm leading-relaxed">
+              When you submit an inquiry or consultation request, we collect details such as your name, contact phone number, email address, and specific site details.
+            </p>
+            <h2 className="text-xl font-bold text-[#121212] pt-4">2. How We Use Your Information</h2>
+            <p className="text-sm leading-relaxed">
+              Your details are exclusively used by our interior architects and project managers to prepare preliminary floor plans, cost estimates, and coordinate site visits. We never sell or share your information with unauthorized third parties.
+            </p>
+          </div>
+        )}
+
+        {/* --------------------------------------
+            10. TERMS OF SERVICE PAGE
+        -------------------------------------- */}
+        {activeTab === 'terms' && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6 animate-fade-in text-neutral-700">
+            <h1 className="text-3xl font-bold text-[#121212]">Terms of Service</h1>
+            <p className="text-xs text-neutral-400">Last updated: August 2026</p>
+            <p className="text-sm leading-relaxed">
+              Welcome to MY HOMES MAKER. By exploring our website or engaging our construction and interior services, you agree to the following operational terms.
+            </p>
+            <h2 className="text-xl font-bold text-[#121212] pt-4">1. Project Agreements & Blueprints</h2>
+            <p className="text-sm leading-relaxed">
+              All 3D visual renders, structural blueprints, and Vastu consultations remain intellectual property of MY HOMES MAKER until final project agreement signing.
+            </p>
+            <h2 className="text-xl font-bold text-[#121212] pt-4">2. Quotations & Milestones</h2>
+            <p className="text-sm leading-relaxed">
+              Price estimates provided on the website are indicative. Official project costs are finalized after detailed site measurement and material selection.
+            </p>
+          </div>
+        )}
+
+        {/* --------------------------------------
+            11. 404 CUSTOM ERROR PAGE
+        -------------------------------------- */}
+        {activeTab === '404' && (
+          <div className="max-w-2xl mx-auto px-4 py-24 text-center space-y-6 animate-fade-in">
+            <div className="text-8xl font-extrabold text-[#C5A880]">404</div>
+            <h1 className="text-3xl font-bold text-[#121212]">Page Not Found</h1>
+            <p className="text-neutral-500 text-sm">
+              The architectural path or room you are searching for does not exist or has been relocated.
+            </p>
+            <button
+              onClick={() => navigateTo('home')}
+              className="px-6 py-3 bg-[#121212] text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-[#C5A880] hover:text-[#121212] transition"
+            >
+              Back to Home Page
+            </button>
+          </div>
+        )}
+
+      </main>
+
+      {/* ==========================================
+          SERVICE DETAILS MODAL
+      ========================================== */}
+      {selectedService && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col border border-neutral-200">
+            <div className="relative h-64 overflow-hidden">
+              <img src={selectedService.image} alt={selectedService.title} className="w-full h-full object-cover" />
+              <button
+                onClick={() => setSelectedService(null)}
+                className="absolute top-4 right-4 bg-black/60 hover:bg-black text-white p-2 rounded-full text-xs font-bold transition"
+              >
+                ✕ Close
+              </button>
+              <div className="absolute bottom-4 left-6 bg-black/80 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold">
+                {selectedService.tag}
+              </div>
+            </div>
+
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">{selectedService.icon}</span>
+                <div>
+                  <h2 className="text-2xl font-bold text-[#121212]">{selectedService.title}</h2>
+                  <p className="text-xs text-[#C5A880] font-semibold uppercase tracking-wider">MY HOMES MAKER Signature Service</p>
+                </div>
+              </div>
+
+              <p className="text-neutral-600 text-sm leading-relaxed">
+                {selectedService.detailedDesc}
+              </p>
+
+              <div>
+                <h4 className="font-bold text-sm text-[#121212] mb-3 uppercase tracking-wider">Key Deliverables & Specifications</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {selectedService.features.map((feat, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-neutral-700 bg-neutral-50 p-3 rounded-xl border border-neutral-100">
+                      <span className="text-[#C5A880] font-bold">✓</span> {feat}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-neutral-100 flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => {
+                    setSelectedService(null);
+                    navigateTo('contact');
+                  }}
+                  className="w-full py-3 bg-[#121212] hover:bg-[#C5A880] text-white hover:text-[#121212] text-xs font-bold uppercase tracking-wider rounded-xl transition"
+                >
+                  Book Service Consultation
+                </button>
+                <button
+                  onClick={() => triggerWhatsApp(`Hi, I want details regarding ${selectedService.title}.`)}
+                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2"
+                >
+                  💬 Inquire on WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          PROJECT DETAILS MODAL
+      ========================================== */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+            <div className="relative h-72 sm:h-96">
+              <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-4 right-4 bg-black/70 text-white p-2.5 rounded-full text-xs font-bold hover:bg-black transition"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-100 pb-4">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#C5A880]">{selectedProject.category}</span>
+                  <h2 className="text-2xl font-bold text-[#121212]">{selectedProject.title}</h2>
+                  <p className="text-xs text-neutral-400">{selectedProject.location}</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-neutral-500">Built-Up Area</div>
+                  <div className="font-bold text-[#121212] text-sm">{selectedProject.area}</div>
+                </div>
+              </div>
+
+              <p className="text-neutral-600 text-sm leading-relaxed">{selectedProject.fullDetails}</p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-neutral-50 p-4 rounded-2xl border border-neutral-200/80 text-xs">
+                <div>
+                  <div className="text-neutral-400 uppercase tracking-wider">Duration</div>
+                  <div className="font-bold text-neutral-800 mt-0.5">{selectedProject.timeline}</div>
+                </div>
+                <div>
+                  <div className="text-neutral-400 uppercase tracking-wider">Style</div>
+                  <div className="font-bold text-neutral-800 mt-0.5">{selectedProject.style}</div>
+                </div>
+                <div>
+                  <div className="text-neutral-400 uppercase tracking-wider">Materials</div>
+                  <div className="font-bold text-neutral-800 mt-0.5">{selectedProject.materials}</div>
+                </div>
+                <div>
+                  <div className="text-neutral-400 uppercase tracking-wider">Vastu Status</div>
+                  <div className="font-bold text-emerald-700 mt-0.5">100% Compliant</div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => triggerWhatsApp(`Hi MY HOMES MAKER, I like the project "${selectedProject.title}". Can I get a similar layout estimate?`)}
+                  className="w-full py-3.5 bg-[#121212] text-white hover:bg-[#C5A880] hover:text-[#121212] text-xs font-bold uppercase tracking-wider rounded-xl transition"
+                >
+                  Request Similar Project Estimate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          LIGHTBOX MODAL
+      ========================================== */}
+      {lightboxImage && (
+        <div
+          onClick={() => setLightboxImage(null)}
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in cursor-zoom-out"
+        >
+          <div className="relative max-w-5xl max-h-[90vh] text-center" onClick={(e) => e.stopPropagation()}>
+            <img src={lightboxImage.url} alt={lightboxImage.title} className="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain mx-auto" />
+            <div className="mt-4 text-white">
+              <div className="text-xs uppercase tracking-widest text-[#C5A880] font-bold">{lightboxImage.category}</div>
+              <div className="text-lg font-semibold">{lightboxImage.title}</div>
+            </div>
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute -top-12 right-0 text-white hover:text-[#C5A880] text-sm font-bold uppercase tracking-wider"
+            >
+              Close ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          FLOATING QUICK WHATSAPP & BACK TO TOP
+      ========================================== */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+        {/* Floating WhatsApp Button */}
+        <button
+          onClick={() => triggerWhatsApp()}
+          className="w-13 h-13 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full p-3.5 shadow-2xl flex items-center justify-center transition-transform hover:scale-110 border-2 border-white"
+          title="Chat with Us on WhatsApp"
+        >
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+        </button>
+
+        {/* Back to Top Floating Button */}
+        {scrolled && (
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="w-10 h-10 bg-[#121212] hover:bg-[#C5A880] text-white hover:text-[#121212] rounded-full shadow-lg flex items-center justify-center transition"
+            title="Back to Top"
+          >
+            ↑
+          </button>
+        )}
+      </div>
+
+      {/* ==========================================
+          FOOTER
+      ========================================== */}
+      <footer className="bg-[#121212] text-white pt-16 pb-12 border-t border-neutral-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            
+            {/* Col 1: Brand */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#C5A880] text-[#121212] font-bold text-lg flex items-center justify-center">
+                  M
+                </div>
+                <span className="text-lg font-bold tracking-tight uppercase">MY HOMES MAKER</span>
+              </div>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Premier Interior Design & Civil Construction company providing end-to-end architectural, 3D modeling, and turnkey home decor solutions.
+              </p>
+              <div className="text-xs text-[#C5A880] font-semibold">
+                📍 Amroha &bull; Moradabad &bull; NCR
+              </div>
+            </div>
+
+            {/* Col 2: Navigation Links */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] mb-4">Quick Navigation</h4>
+              <ul className="space-y-2 text-xs text-neutral-400">
+                {['Home', 'About', 'Services', 'Projects', 'Gallery', 'Testimonials', 'FAQ', 'Contact'].map((item) => (
+                  <li key={item}>
+                    <button
+                      onClick={() => navigateTo(item.toLowerCase())}
+                      className="hover:text-white transition"
+                    >
+                      {item}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Col 3: Services Listing */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] mb-4">Core Offerings</h4>
+              <ul className="space-y-2 text-xs text-neutral-400">
+                {servicesData.slice(0, 6).map((serv) => (
+                  <li key={serv.id}>
+                    <button
+                      onClick={() => {
+                        setSelectedService(serv);
+                      }}
+                      className="hover:text-white transition text-left"
+                    >
+                      • {serv.title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Col 4: Contact & Social */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] mb-4">Direct Contact</h4>
+              <p className="text-xs text-neutral-400 leading-relaxed mb-3">
+                1 B 234, Atrasi Rd, Avas Vikas Colony, Amroha, Uttar Pradesh 244245
+              </p>
+              <div className="text-xs text-neutral-300 font-bold mb-3">
+                Call: <a href="tel:+919870632368" className="hover:text-[#C5A880]">+91 98706 32368</a>
+              </div>
+              <a
+                href="https://www.instagram.com/myhomesmaker"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block text-xs font-bold text-white bg-neutral-800 hover:bg-[#C5A880] hover:text-[#121212] px-4 py-2 rounded-full transition"
+              >
+                📸 Instagram: @myhomesmaker
+              </a>
+            </div>
+
+          </div>
+
+          {/* Legal Bar */}
+          <div className="pt-8 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
+            <div>
+              &copy; {new Date().getFullYear()} MY HOMES MAKER. All Rights Reserved. Turnkey Interior & Construction.
+            </div>
+            <div className="flex gap-6">
+              <button onClick={() => navigateTo('privacy')} className="hover:text-neutral-300">Privacy Policy</button>
+              <button onClick={() => navigateTo('terms')} className="hover:text-neutral-300">Terms of Service</button>
+              <button onClick={() => navigateTo('404')} className="hover:text-neutral-300">404 Demo</button>
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+    </div>
+  );
+}
+
+// ==========================================
+// REAL FACTUAL DATA (MY HOMES MAKER)
+// ==========================================
+
+const servicesData = [
+  {
+    id: 'interior-design',
+    title: 'Interior Design',
+    tag: 'Luxury Decor',
+    icon: '🛋️',
+    description: 'Complete interior design execution for living rooms, master suites, dining spaces, and custom lighting.',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Our interior design suite transforms raw spaces into cohesive luxury environments. We handle material sourcing, custom furniture manufacturing, False ceiling installation, ambient mood lighting, and wall textures tailored to your aesthetic.',
+    features: ['Custom Italian Marble & Wood Work', 'False Ceiling & LED Mood Lighting', 'Curtain & Upholstery Selection', 'Space Optimization & Layout']
+  },
+  {
+    id: 'civil-construction',
+    title: 'Civil Construction',
+    tag: 'Turnkey Building',
+    icon: '🏗️',
+    description: 'Structural civil building construction from raw soil excavation to column framing and finishing.',
+    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'End-to-end residential bungalow, villa, and commercial structure construction. We manage structural engineering, certified concrete mixes, steel framing, waterproofing, and quality inspection.',
+    features: ['RCC Frame & Concrete Works', 'Brickwork & Waterproofing', 'Elevation Architecture', 'Structural Guarantee']
+  },
+  {
+    id: 'home-renovation',
+    title: 'Home Renovation',
+    tag: 'Full Makeover',
+    icon: '🔨',
+    description: 'Complete remodeling of existing houses, old structures, structural layout changes, and floor upgrades.',
+    image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Breathe new life into aging homes. We modernize old floor plans, demolish non-load-bearing walls, overhaul plumbing, tile flooring, and replace outdated woodwork.',
+    features: ['Structural Re-layouting', 'Tile & Marble Replacement', 'Wall Repairs & ACP Panels', 'Updated Fixtures']
+  },
+  {
+    id: '3d-design',
+    title: '3D Design & Rendering',
+    tag: 'Photorealistic',
+    icon: '📐',
+    description: 'High-definition 3D walkthroughs and interior/exterior architectural renders before execution.',
+    image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Eliminate guesswork with 4K photorealistic 3D renders. Preview exact lighting, cabinet finishes, paint shades, and spatial volume prior to buying materials.',
+    features: ['360-degree Virtual Walkthroughs', '4K Architectural Elevation Renders', 'Exact Material Color Match', 'Virtual Furniture Testing']
+  },
+  {
+    id: 'floor-plans',
+    title: 'Architectural Floor Plans',
+    tag: 'Engineering Blueprint',
+    icon: '🗺️',
+    description: 'Precise 2D CAD floor plans, structural column positioning, and municipal submission drawings.',
+    image: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Engineered floor layouts maximizing natural sunlight, ventilation, room circulation, and structural load distribution.',
+    features: ['2D AutoCAD Blueprints', 'Column & Beam Layouts', 'Ventilation & Solar Analysis', 'Municipal Approval Ready']
+  },
+  {
+    id: 'kitchen-design',
+    title: 'Modular Kitchen Design',
+    tag: 'Bespoke Culinary',
+    icon: '🍳',
+    description: 'Contemporary acrylic, lacquered glass, and ceramic modular kitchens with soft-close fittings.',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Ergonomic modular kitchen layouts including L-shape, U-shape, parallel, and island designs. Featuring Blum/Hettich soft-close hardware, quartz countertops, and built-in appliances.',
+    features: ['Blum/Hettich Soft-Close Hardware', 'Quartz & Granite Countertops', 'Waterproof BWP Plywood', 'Pantry & Chimney Integration']
+  },
+  {
+    id: 'bathroom-design',
+    title: 'Bathroom Design & Fitting',
+    tag: 'Luxury Spa',
+    icon: '🚿',
+    description: 'Spa-inspired luxury bathrooms, glass shower enclosures, wall-hung sanitaryware, and concealed valves.',
+    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Transform bathrooms into luxury retreats with anti-skid vitrified tiles, frameless shower partitions, wall-hung closets, and Grohe/Kohler diverters.',
+    features: ['Frameless Glass Partitions', 'Concealed Thermostatic Mixers', 'Anti-Skid Tile Layout', 'Vanity Cabinetry']
+  },
+  {
+    id: 'commercial-design',
+    title: 'Commercial Design',
+    tag: 'Corporate & Retail',
+    icon: '🏢',
+    description: 'Modern office interiors, retail boutiques, jewelry showrooms, and hospital building interiors.',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'High-impact commercial environments designed for productivity and customer experience. Cabins, reception zones, workstation clusters, and HVAC ceiling integration.',
+    features: ['Acoustic Ceiling Systems', 'Custom Conference Tables', 'Brand Accent Lighting', 'HVAC & Fire Safety Layout']
+  },
+  {
+    id: 'residential-design',
+    title: 'Residential Design',
+    tag: 'Sanctuary Living',
+    icon: '🏡',
+    description: 'Complete home interiors for modern flats, duplexes, penthouses, and independent bungalows.',
+    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Comprehensive villa and apartment interior schemes crafted to reflect your personal style and daily lifestyle needs.',
+    features: ['Custom Master Beds & Wardrobes', 'TV Console Units', 'Dining & Bar Counters', 'Foyer & Shoe Units']
+  },
+  {
+    id: 'vastu-consultancy',
+    title: 'Vastu Consultancy',
+    tag: 'Harmonious Energy',
+    icon: '🧭',
+    description: 'Scientific Vastu Shastra consultation for main entrance orientation, kitchen placement, and bedroom directions.',
+    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Harmonize your living environment with non-demolition Vastu guidelines for main door placement, master bed alignment, and water tank positioning.',
+    features: ['Directional Energy Mapping', 'Pooja Room Alignment', 'Kitchen Fire Zone Compliance', 'Remedial Solutions']
+  },
+  {
+    id: 'electrical-plumbing',
+    title: 'Electrical & Plumbing Drawings',
+    tag: 'MEP Engineering',
+    icon: '⚡',
+    description: 'Technical wiring diagrams, switch placement, distribution boards, and sanitary pipe line routing.',
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80',
+    detailedDesc: 'Avoid costly re-drilling and pipe leakages with precise MEP (Mechanical, Electrical, Plumbing) engineering drawings.',
+    features: ['Inverter & DB Box Layouts', 'Heavy Appliance Lines', 'Drainage & Overhead Tank Lines', 'Circuit Load Distribution']
+  }
+];
+
+const projectsData = [
+  {
+    id: 'p1',
+    title: 'The Golden Oasis Villa',
+    category: 'Residential',
+    location: 'Avas Vikas, Amroha',
+    area: '3,800 sq.ft.',
+    timeline: '5 Months',
+    style: 'Modern Contemporary Luxury',
+    materials: 'Italian Marble, Teak Veneer, Quartz',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+    summary: 'Turnkey 4BHK luxury villa construction with double-height ceiling, glass elevation, and customized modular kitchen.',
+    fullDetails: 'Executed complete civil construction and interior design for a modern family residence. Features customized CNC metal jali partitions, recessed magnetic track lights, and a central courtyards for natural air circulation.'
+  },
+  {
+    id: 'p2',
+    title: 'Atrasi Modular Kitchen Masterwork',
+    category: 'Kitchen',
+    location: 'Atrasi Road, Amroha',
+    area: '240 sq.ft.',
+    timeline: '3 Weeks',
+    style: 'Minimalist Handleless',
+    materials: 'Acrylic Shutters, Hafele Tandem Boxes',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
+    summary: 'Handleless modular kitchen with lacquered glass wall cladding and integrated pantry pull-outs.',
+    fullDetails: 'Designed for optimal kitchen triangle work flow. Features waterproof HDMR plywood structure, quartz stone countertop with sink drainer, and ambient under-cabinet LED strips.'
+  },
+  {
+    id: 'p3',
+    title: 'Executive Corporate Cabin',
+    category: 'Commercial',
+    location: 'Moradabad Road',
+    area: '1,200 sq.ft.',
+    timeline: '6 Weeks',
+    style: 'Industrial Chic',
+    materials: 'Fluted Panel, Charcoal Slate, LED Channels',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    summary: 'Sophisticated executive director cabin with acoustic paneling and custom leatherette seating.',
+    fullDetails: 'Built for high-level meetings and productivity. Features sound-insulated glass doors, concealed cabling, and smart automated lighting controls.'
+  },
+  {
+    id: 'p4',
+    title: 'Opulent Master Suite & Walk-in Wardrobe',
+    category: 'Bedroom',
+    location: 'Lodhipur',
+    area: '450 sq.ft.',
+    timeline: '4 Weeks',
+    style: 'Warm European Neutral',
+    materials: 'Upholstered Velvet, Tinted Mirror',
+    image: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80',
+    summary: 'Luxury master bedroom with floor-to-ceiling headboard cushioning and custom glass closet doors.',
+    fullDetails: 'Complete bedroom makeover featuring ambient cove ceiling lighting, integrated dresser vanity mirror, and private reading nook.'
+  },
+  {
+    id: 'p5',
+    title: 'Contemporary Open-Plan Living Room',
+    category: 'Living Room',
+    location: 'Makanpur Syad Kasba',
+    area: '600 sq.ft.',
+    timeline: '1 Month',
+    style: 'Scandinavian Minimalist',
+    materials: 'Vitrified Marble Tiles, Walnut Finish',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+    summary: 'Spacious formal living room with large TV wall console and charcoal accent panels.',
+    fullDetails: 'Incorporated custom sectional sofa, wall-mounted acoustic panelling behind OLED TV, and warm indirect lighting for cozy family gatherings.'
+  },
+  {
+    id: 'p6',
+    title: 'Multi-Storey Civil Structure',
+    category: 'Construction',
+    location: 'Jyotiba Phule Nagar',
+    area: '5,200 sq.ft.',
+    timeline: '8 Months',
+    style: 'RCC Structural Frame',
+    materials: 'Tata Tiscon Steel, Ultratech Concrete',
+    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80',
+    summary: 'Structural framing and civil brickwork for a commercial + residential mixed-use complex.',
+    fullDetails: 'Engineered for earthquake resistance with reinforced column footings, external ACP panel cladding, and rainwater harvesting setup.'
+  }
+];
+
+const galleryPhotos = [
+  { id: 1, category: 'Living Room', title: 'Minimalist Lounge & Marble TV Wall', url: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80' },
+  { id: 2, category: 'Kitchen', title: 'L-Shaped Acrylic Modular Kitchen', url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80' },
+  { id: 3, category: 'Bedroom', title: 'Velvet Headboard & Pendant Lighting', url: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80' },
+  { id: 4, category: 'Bathroom', title: 'Spa Bath with Fluted Glass Partition', url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
+  { id: 5, category: 'Exterior & Site', title: 'Modern Duplex Elevation Construction', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
+  { id: 6, category: 'Living Room', title: 'Double Height Ceiling & Chandelier', url: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80' }
+];
+
+const testimonialsData = [
+  {
+    id: 1,
+    name: 'Deepak Sharma',
+    role: 'Homeowner',
+    location: 'Avas Vikas Colony, Amroha',
+    rating: 5,
+    service: 'Full Turnkey Villa Design',
+    text: 'Thanks to MY HOMES MAKER for delivering a lovely house within our target budget. Their team managed everything from raw civil foundation to final modular kitchen installation without hassle.'
+  },
+  {
+    id: 2,
+    name: 'Vinit Agarwal',
+    role: 'Business Owner',
+    location: 'Moradabad Road',
+    rating: 5,
+    service: 'Office & Showroom Interior',
+    text: 'Best interior designing company in the region. Their 3D drawings gave us complete confidence before buying materials. The execution matched the 3D render 100%!'
+  },
+  {
+    id: 3,
+    name: 'Akash Rastogi',
+    role: 'Villa Owner',
+    location: 'Amroha',
+    rating: 5,
+    service: 'Home Renovation & Vastu',
+    text: 'Extremely creative architects and polite staff. They altered our old house plan into a modern open layout following proper Vastu principles. Highly recommended!'
+  },
+  {
+    id: 4,
+    name: 'Nirmal Singh',
+    role: 'Property Developer',
+    location: 'Jyotiba Phule Nagar',
+    rating: 5,
+    service: 'Civil Building Construction',
+    text: 'Quick service, transparent pricing, and strong civil construction quality. Their site supervisors inspected material quality daily.'
+  }
+];
+
+const faqData = [
+  {
+    q: 'What is the design process at MY HOMES MAKER?',
+    a: 'Our process begins with an initial site measurement and client consultation. Next, we create 2D AutoCAD floor plans and photorealistic 4K 3D renders. Once approved, we provide a fixed budget quote and execute civil construction and interior fittings under strict supervision.'
+  },
+  {
+    q: 'Do you offer Vastu-compliant layouts?',
+    a: 'Yes, 100%. All our architectural blueprints and room placements (kitchen, master bedroom, main entrance, pooja room) are verified by certified Vastu guidelines.'
+  },
+  {
+    q: 'Can you work within my specific budget limit?',
+    a: 'Absolutely. We offer customized material packages (Gold, Luxury, Platinum) allowing clients to choose finishes, hardware brands, and tiles that align with their budget.'
+  },
+  {
+    q: 'How long does a typical interior design or construction project take?',
+    a: 'A modular kitchen or single room makeover typically takes 2 to 3 weeks. Full home interior projects take 4 to 8 weeks. Complete civil villa construction takes 5 to 9 months.'
+  },
+  {
+    q: 'Where is your physical studio located?',
+    a: 'Our flagship studio is located at 1 B 234, Atrasi Rd, Near Avas Vikas Colony, Danishmandan, Amroha, Uttar Pradesh 244245. You can visit us Mon-Sat between 9 AM and 8 PM.'
+  }
+];
